@@ -1,108 +1,295 @@
-// ============================================
-// PORTAL AGRÍCOLA TECH - AGRINHO 2026
-// Tema: Agro forte, futuro sustentável
-// Layout horizontal e espaçoso
-// ============================================
-
-let quantidade = "2"; 
-let precoPorUnidade = 5.00; 
-let total = 10.00;
-let bolhas = [];
-let botoesNum = [];
-let botoesProduto = [];
-let botoesPreco = [];
-let botaoAdicionar = null;
-let botaoLimparCarrinho = null;
-let botaoRemoverUltimo = null;
-let mensagemSustentavel = "";
-let tempoMensagem = 0;
-let mensagemFeedback = "";
-let tempoFeedback = 0;
-
-// Carrinho de compras
+let quantidade = "2";
+let precoPorUnidade = 5.00;
 let carrinho = [];
-
-// Produtos agrícolas
-let produtos = [
-  { 
-    nome: "Sementes Orgânicas", 
-    precoInicial: 5.00,
-    infoSustentavel: "🌱 Cultivo sem agrotóxicos",
-    impactoCO2: "Baixo",
-    icone: "🌱"
-  },
-  { 
-    nome: "Adubo Natural (kg)", 
-    precoInicial: 12.50,
-    infoSustentavel: "🌿 Compostagem orgânica",
-    impactoCO2: "Muito Baixo",
-    icone: "🌿"
-  },
-  { 
-    nome: "Mudas Nativas", 
-    precoInicial: 8.00,
-    infoSustentavel: "🌳 Reflorestamento local",
-    impactoCO2: "Negativo (captura CO₂)",
-    icone: "🌳"
-  }
-];
-
 let produtoSelecionado = 0;
 let precosPersonalizados = [5.00, 12.50, 8.00];
+let bolhas = [];
+
+let produtos = [
+  { nome: "Sementes Organicas", precoInicial: 5.00, icone: "🌱", impacto: "Baixo" },
+  { nome: "Adubo Natural (kg)", precoInicial: 12.50, icone: "🌿", impacto: "Muito Baixo" },
+  { nome: "Mudas Nativas", precoInicial: 8.00, icone: "🌳", impacto: "Negativo" }
+];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Arial');
   
-  // Teclado Numérico (posicionado à esquerda)
-  let infosBotoes = [
-    { label: '1', x: 60, y: 80 },   { label: '2', x: 140, y: 80 },  { label: '3', x: 220, y: 80 },
-    { label: '4', x: 60, y: 145 },  { label: '5', x: 140, y: 145 }, { label: '6', x: 220, y: 145 },
-    { label: '7', x: 60, y: 210 },  { label: '8', x: 140, y: 210 }, { label: '9', x: 220, y: 210 },
-    { label: 'C', x: 60, y: 275 },  { label: '0', x: 140, y: 275 }, { label: '←', x: 220, y: 275 }
-  ];
-  
-  for (let b of infosBotoes) {
-    botoesNum.push({ label: b.label, x: b.x, y: b.y, w: 65, h: 50 });
-  }
-
-  // Seletor de Produtos (centralizado no topo)
-  for (let i = 0; i < produtos.length; i++) {
-    botoesProduto.push({
-      id: i,
-      label: produtos[i].icone + " " + produtos[i].nome,
-      x: width/2 - 225 + (i * 225),
-      y: 20,
-      w: 200,
-      h: 55
-    });
-  }
-
-  // Botões de preço (no centro)
-  botoesPreco.push({ label: '-', x: width/2 - 120, y: 200, w: 55, h: 50, acao: -0.50 });
-  botoesPreco.push({ label: '+', x: width/2 + 65, y: 200, w: 55, h: 50, acao: 0.50 });
-  
-  // Botões de ação (abaixo do carrinho)
-  botaoAdicionar = { label: '🛒 Adicionar ao Carrinho', x: width/2 - 350, y: 420, w: 320, h: 55 };
-  botaoRemoverUltimo = { label: '↩️ Remover Último', x: width/2 - 170, y: 485, w: 200, h: 45 };
-  botaoLimparCarrinho = { label: '🗑️ Limpar Tudo', x: width/2 + 70, y: 485, w: 200, h: 45 };
-  
-  // Bolhas do fundo
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 20; i++) {
     bolhas.push({
       x: random(width),
-      y: random(height, height + 200),
-      tamanho: random(15, 70),
-      velocidade: random(0.3, 1.8),
-      tipo: random() > 0.7 ? 'folha' : 'bolha'
+      y: random(height),
+      t: random(10, 50),
+      v: random(0.3, 1.5)
     });
   }
-  
-  atualizarMensagemSustentavel();
-  recalcularTotal();
 }
 
-function normalizarQuantidade(qtd) {
+function draw() {
+  // Fundo gradiente
+  for (let y = 0; y < height; y++) {
+    let inter = map(y, 0, height, 0, 1);
+    let c = lerpColor(color('#00b4db'), color('#00ff87'), inter);
+    stroke(c);
+    line(0, y, width, y);
+  }
+  
+  // Bolhas
+  noStroke();
+  for (let b of bolhas) {
+    fill(255, 255, 255, 30);
+    ellipse(b.x, b.y, b.t);
+    b.y = b.y - b.v;
+    if (b.y < -b.t) {
+      b.y = height + b.t;
+      b.x = random(width);
+    }
+  }
+  
+  textAlign(CENTER, CENTER);
+  
+  // Título
+  textSize(28);
+  fill('#004d4d');
+  textStyle(BOLD);
+  text("🌾 Portal Agricola Tech", width/2, 40);
+  
+  textSize(13);
+  fill('#006666');
+  textStyle(ITALIC);
+  text("Agro forte, futuro sustentavel", width/2, 65);
+  
+  // Produtos
+  for (let i = 0; i < produtos.length; i++) {
+    let y = 110 + i * 50;
+    
+    if (produtoSelecionado === i) {
+      fill('#00b4db');
+      stroke(255);
+      strokeWeight(3);
+    } else {
+      fill(255, 255, 255, 170);
+      stroke(255, 255, 255, 200);
+      strokeWeight(1);
+    }
+    
+    let w = min(width - 40, 350);
+    rect(width/2, y, w, 42, 12);
+    
+    noStroke();
+    fill(produtoSelecionado === i ? 255 : '#004d4d');
+    textSize(14);
+    textStyle(BOLD);
+    text(produtos[i].icone + " " + produtos[i].nome, width/2, y);
+  }
+  
+  // Preço
+  let precoY = 275;
+  fill(255, 255, 255, 180);
+  stroke('#00ff87');
+  strokeWeight(2);
+  rect(width/2, precoY, 250, 40, 10);
+  
+  noStroke();
+  fill('#003366');
+  textSize(16);
+  textStyle(BOLD);
+  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, precoY);
+  
+  // Botões + e -
+  fill(255, 255, 255, 190);
+  stroke('#00ff87');
+  strokeWeight(2);
+  rect(width/2 - 90, precoY, 50, 40, 10);
+  rect(width/2 + 90, precoY, 50, 40, 10);
+  
+  noStroke();
+  fill('#004d4d');
+  textSize(22);
+  textStyle(BOLD);
+  text("-", width/2 - 65, precoY);
+  text("+", width/2 + 115, precoY);
+  
+  // Quantidade
+  let qtdY = 330;
+  fill(255, 255, 255, 180);
+  stroke('#00b4db');
+  strokeWeight(2);
+  rect(width/2, qtdY, 200, 40, 10);
+  
+  noStroke();
+  fill('#003366');
+  textSize(16);
+  textStyle(BOLD);
+  text("Qtd: " + quantidade + " un", width/2, qtdY);
+  
+  // Teclado
+  let teclas = ['1','2','3','4','5','6','7','8','9','C','0','←'];
+  let tx = width/2 - 110;
+  let ty = 385;
+  
+  for (let i = 0; i < teclas.length; i++) {
+    let col = i % 3;
+    let row = floor(i / 3);
+    let x = tx + col * 75;
+    let y = ty + row * 55;
+    
+    fill(255, 255, 255, 170);
+    stroke(255, 255, 255, 200);
+    strokeWeight(1);
+    rect(x, y, 65, 45, 10);
+    
+    noStroke();
+    fill('#004d4d');
+    textSize(18);
+    textStyle(BOLD);
+    text(teclas[i], x + 32, y + 22);
+  }
+  
+  // Botão Adicionar
+  let addY = ty + 230;
+  fill('#00cc6a');
+  stroke('#00ff87');
+  strokeWeight(2);
+  rect(width/2, addY, width - 40, 48, 15);
+  
+  noStroke();
+  fill(255);
+  textSize(16);
+  textStyle(BOLD);
+  text("🛒 ADICIONAR AO CARRINHO", width/2, addY);
+  
+  // Carrinho
+  let cartY = addY + 65;
+  fill(255, 255, 255, 160);
+  stroke('#00cc6a');
+  strokeWeight(2);
+  rect(width/2, cartY, width - 40, 110, 12);
+  
+  noStroke();
+  
+  if (carrinho.length > 0) {
+    fill('#004d4d');
+    textSize(14);
+    textStyle(BOLD);
+    text("🛒 Carrinho (" + carrinho.length + " itens)", width/2, cartY - 42);
+    
+    let totalCarrinho = 0;
+    for (let item of carrinho) {
+      totalCarrinho = totalCarrinho + item.subtotal;
+    }
+    
+    fill('#005500');
+    textSize(20);
+    text("Total: R$ " + totalCarrinho.toFixed(2).replace('.', ','), width/2, cartY - 18);
+    
+    textAlign(LEFT);
+    for (let i = 0; i < min(carrinho.length, 3); i++) {
+      let item = carrinho[i];
+      let pi = encontrarProduto(item.nome);
+      fill('#004d4d');
+      textSize(10);
+      textStyle(BOLD);
+      text((i+1) + ". " + produtos[pi].icone + " " + item.qtd + "x = R$" + item.subtotal.toFixed(2).replace('.', ','), 30, cartY + 10 + i * 22);
+    }
+    textAlign(CENTER, CENTER);
+  } else {
+    fill('#999999');
+    textSize(13);
+    textStyle(ITALIC);
+    text("🛒 Carrinho vazio", width/2, cartY);
+  }
+  
+  // Rodapé
+  textSize(10);
+  fill('#004d4d');
+  textStyle(NORMAL);
+  text("Agrinho 2026 | SENAR-PR e SEED-PR", width/2, height - 15);
+}
+
+function encontrarProduto(nome) {
+  for (let i = 0; i < produtos.length; i++) {
+    if (produtos[i].nome === nome) return i;
+  }
+  return 0;
+}
+
+function mousePressed() {
+  // Produtos
+  for (let i = 0; i < produtos.length; i++) {
+    let y = 110 + i * 50;
+    let w = min(width - 40, 350);
+    if (mouseX > width/2 - w/2 && mouseX < width/2 + w/2 && mouseY > y - 21 && mouseY < y + 21) {
+      produtoSelecionado = i;
+      precoPorUnidade = precosPersonalizados[i];
+      return;
+    }
+  }
+  
+  // Botões + e -
+  let precoY = 275;
+  if (mouseX > width/2 - 115 && mouseX < width/2 - 65 && mouseY > precoY - 20 && mouseY < precoY + 20) {
+    precoPorUnidade = precoPorUnidade - 0.50;
+    if (precoPorUnidade < 0.50) precoPorUnidade = 0.50;
+    precosPersonalizados[produtoSelecionado] = precoPorUnidade;
+    return;
+  }
+  if (mouseX > width/2 + 65 && mouseX < width/2 + 115 && mouseY > precoY - 20 && mouseY < precoY + 20) {
+    precoPorUnidade = precoPorUnidade + 0.50;
+    precosPersonalizados[produtoSelecionado] = precoPorUnidade;
+    return;
+  }
+  
+  // Teclado
+  let teclas = ['1','2','3','4','5','6','7','8','9','C','0','←'];
+  let tx = width/2 - 110;
+  let ty = 385;
+  
+  for (let i = 0; i < teclas.length; i++) {
+    let col = i % 3;
+    let row = floor(i / 3);
+    let x = tx + col * 75;
+    let y = ty + row * 55;
+    
+    if (mouseX > x && mouseX < x + 65 && mouseY > y && mouseY < y + 45) {
+      let t = teclas[i];
+      
+      if (t === 'C') {
+        quantidade = "0";
+      } else if (t === '←') {
+        if (quantidade.length > 1) quantidade = quantidade.slice(0, -1);
+        else quantidade = "0";
+      } else {
+        if (quantidade === "0") quantidade = t;
+        else quantidade = quantidade + t;
+      }
+      
+      if (quantidade.length > 5) quantidade = quantidade.slice(0, 5);
+      if (parseInt(quantidade) > 99999) quantidade = "99999";
+      break;
+    }
+  }
+  
+  // Botão Adicionar
+  let addY = ty + 230;
+  if (mouseX > 20 && mouseX < width - 20 && mouseY > addY - 24 && mouseY < addY + 24) {
+    let qtd = parseInt(quantidade);
+    if (qtd > 0) {
+      let p = produtos[produtoSelecionado];
+      carrinho.push({
+        nome: p.nome,
+        qtd: qtd,
+        preco: precoPorUnidade,
+        subtotal: qtd * precoPorUnidade
+      });
+      quantidade = "1";
+    }
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}function normalizarQuantidade(qtd) {
   if (qtd === "" || qtd === "0") return "0";
   return qtd.replace(/^0+/, "") || "0";
 }
