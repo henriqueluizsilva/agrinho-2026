@@ -8,12 +8,13 @@ let bolhas = [];
 let produtos = [
   { nome: "Sementes Organicas", precoInicial: 5.00, icone: "🌱", impacto: "Baixo" },
   { nome: "Adubo Natural (kg)", precoInicial: 12.50, icone: "🌿", impacto: "Muito Baixo" },
-  { nome: "Mudas Nativas", precoInicial: 8.00, icone: "🌳", impacto: "Negativo" }
+  { nome: "Mudas Nativas", precoInicial: 8.00, icone: "🌳", impacto: "Positivo" } // Corrigido de Negativo para Positivo
 ];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Arial');
+  rectMode(CENTER); // CRUCIAL: Garante que os retângulos alinhem pelo centro junto com os textos
   
   for (let i = 0; i < 20; i++) {
     bolhas.push({
@@ -102,6 +103,69 @@ function draw() {
   strokeWeight(2);
   rect(width/2 - 90, precoY, 50, 40, 10);
   rect(width/2 + 90, precoY, 50, 40, 10);
+  
+  noStroke();
+  fill('#004d4d');
+  textSize(22);
+  textStyle(BOLD);
+  text("-", width/2 - 90, precoY); // Centralizado no botão correspondente
+  text("+", width/2 + 90, precoY); // Centralizado no botão correspondente
+  
+  // Quantidade
+  let qtdY = 330;
+  fill(255, 255, 255, 180);
+  stroke('#00b4db');
+  strokeWeight(2);
+  rect(width/2, qtdY, 200, 40, 10);
+  
+  noStroke();
+  fill('#003366');
+  textSize(16);
+  textStyle(BOLD);
+  text("Qtd: " + quantidade + " un", width/2, qtdY);
+  
+  // Teclado
+  let teclas = ['1','2','3','4','5','6','7','8','9','C','0','←'];
+  let tx = width/2 - 75; // Ajustado para centralizar o bloco do teclado perfeitamente
+  let ty = 385;
+  
+  for (let i = 0; i < teclas.length; i++) {
+    let col = i % 3;
+    let row = floor(i / 3);
+    let x = tx + (col - 1) * 75; // Distribuição correta a partir do centro
+    let y = ty + row * 55;
+    
+    fill(255, 255, 255, 170);
+    stroke(255, 255, 255, 200);
+    strokeWeight(1);
+    rect(x, y, 65, 45, 10);
+    
+    noStroke();
+    fill('#004d4d');
+    textSize(18);
+    textStyle(BOLD);
+    text(teclas[i], x, y);
+  }
+  
+  // Botão Adicionar
+  let addY = ty + 230;
+  fill('#00cc6a');
+  stroke('#00ff87');
+  strokeWeight(2);
+  rect(width/2, addY, min(width - 40, 350), 48, 15);
+  
+  noStroke();
+  fill(255);
+  textSize(16);
+  textStyle(BOLD);
+  text("🛒 ADICIONAR AO CARRINHO", width/2, addY);
+  
+  // Carrinho
+  let cartY = addY + 75;
+  fill(255, 255, 255, 160);
+  stroke('#00cc6a');
+  strokeWeight(2);
+  rect(width/2, cartY, min(width - 40, 350),
   
   noStroke();
   fill('#004d4d');
