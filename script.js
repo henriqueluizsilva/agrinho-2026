@@ -29,7 +29,8 @@ function setup() {
 }
 
 function draw() {
-  // Fundo
+  background(0, 180, 219);
+  
   for (let y = 0; y < height; y++) {
     let inter = map(y, 0, height, 0, 1);
     let c = lerpColor(color('#00b4db'), color('#00ff87'), inter);
@@ -37,12 +38,11 @@ function draw() {
     line(0, y, width, y);
   }
   
-  // Bolhas
   noStroke();
   for (let b of bolhas) {
     fill(255, 255, 255, 30);
     ellipse(b.x, b.y, b.tamanho);
-    b.y -= b.velocidade;
+    b.y = b.y - b.velocidade;
     if (b.y < -b.tamanho) {
       b.y = height + b.tamanho;
       b.x = random(width);
@@ -51,58 +51,46 @@ function draw() {
   
   textAlign(CENTER, CENTER);
   
-  if (isMobile) {
-    // MODO CELULAR
-    textSize(24);
-    fill('#004d4d');
-    textStyle(BOLD);
-    text("🌾 Portal Agricola Tech", width/2, 30);
-    
-    textSize(14);
-    fill('#006666');
-    text("Agro forte, futuro sustentavel", width/2, 55);
-    
-    // Produtos
-    for (let i = 0; i < produtos.length; i++) {
-      let y = 100 + i * 55;
-      
-      if (produtoSelecionado === i) {
-        fill('#00b4db');
-        stroke(255);
-        strokeWeight(3);
-      } else {
-        fill(255, 255, 255, 170);
-        stroke(255, 255, 255, 200);
-        strokeWeight(1);
-      }
-      rect(width/2, y, width - 40, 45, 12);
-      
-      noStroke();
-      fill(produtoSelecionado === i ? 255 : '#004d4d');
-      textSize(15);
-      textStyle(BOLD);
-      text(produtos[i].icone + " " + produtos[i].nome, width/2, y);
-    }
-    
-    // Preço
-    let precoY = 280;
-    fill(255, 255, 255, 180);
-    stroke('#00ff87');
-    strokeWeight(2);
-    rect(width/2, precoY, width - 80, 40, 10);
-    
-    noStroke();
-    fill('#003366');
-    textSize(16);
-    text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, precoY);
-    
-    // Botões + e -
-    fill(255, 255, 255, 190);
-    stroke('#00ff87');
-    strokeWeight(2);
-    rect(width/2 - 80, precoY, 55, 40, 10);
-    rect(width/2 + 80, precoY, 55, 40, 10);
-    
+  textSize(30);
+  fill('#004d4d');
+  textStyle(BOLD);
+  text("🌾 Portal Agricola Tech", width/2, 50);
+  
+  textSize(14);
+  fill('#006666');
+  textStyle(ITALIC);
+  text("Agro forte, futuro sustentavel", width/2, 80);
+  
+  textSize(16);
+  fill('#004d4d');
+  textStyle(NORMAL);
+  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, 120);
+  text("Quantidade: " + quantidade + " un", width/2, 150);
+  
+  let totalCarrinho = 0;
+  for (let item of carrinho) {
+    totalCarrinho = totalCarrinho + item.subtotal;
+  }
+  
+  textSize(20);
+  fill('#005500');
+  textStyle(BOLD);
+  text("Total Carrinho: R$ " + totalCarrinho.toFixed(2).replace('.', ','), width/2, 200);
+  
+  fill('#004d4d');
+  textSize(12);
+  textStyle(NORMAL);
+  text("Agrinho 2026 | SENAR-PR e SEED-PR", width/2, height - 20);
+}
+
+function mousePressed() {
+  console.log("Mouse clicado em: " + mouseX + ", " + mouseY);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  isMobile = windowWidth < 768;
+}    
     noStroke();
     fill('#004d4d');
     textSize(22);
