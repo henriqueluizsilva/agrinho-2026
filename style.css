@@ -1,32 +1,17 @@
-/* ============================================
-   PORTAL AGRÍCOLA TECH - AGRINHO 2026
-   Tema: Agro forte, futuro sustentável
-   Folha de estilos externa
-   ============================================ */
-
-/* Reset e configurações globais */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Corpo da página - gradiente de fundo */
 body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
-    
-    /* Gradiente de fundo (mesmo do p5.js) */
-    background: linear-gradient(
-        to bottom,
-        #00b4db 0%,
-        #00ff87 100%
-    );
+    background: linear-gradient(to bottom, #00b4db 0%, #00ff87 100%);
 }
 
-/* Canvas do p5.js - ocupa toda a tela */
 canvas {
     display: block;
     position: fixed;
@@ -36,13 +21,11 @@ canvas {
     height: 100%;
 }
 
-/* Melhorias de acessibilidade */
 ::selection {
     background-color: #00b4db;
     color: white;
 }
 
-/* Suporte para dispositivos móveis */
 @media (max-width: 768px) {
     body {
         overflow: auto;
