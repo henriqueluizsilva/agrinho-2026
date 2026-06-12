@@ -1,20 +1,7 @@
-let quantidade = "2";
-let precoPorUnidade = 5.00;
-let carrinho = [];
-let produtoSelecionado = 0;
-let precosPersonalizados = [5.00, 12.50, 8.00];
-let bolhas = [];
-
-let produtos = [
-  { nome: "Sementes Organicas", precoInicial: 5.00, icone: "🌱", impacto: "Baixo" },
-  { nome: "Adubo Natural (kg)", precoInicial: 12.50, icone: "🌿", impacto: "Muito Baixo" },
-  { nome: "Mudas Nativas", precoInicial: 8.00, icone: "🌳", impacto: "Positivo" } // Corrigido de Negativo para Positivo
-];
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Arial');
-  rectMode(CENTER); // CRUCIAL: Garante que os retângulos alinhem pelo centro junto com os textos
+  rectMode(CENTER);
   
   for (let i = 0; i < 20; i++) {
     bolhas.push({
@@ -27,13 +14,9 @@ function setup() {
 }
 
 function draw() {
-  // Fundo gradiente
-  for (let y = 0; y < height; y++) {
-    let inter = map(y, 0, height, 0, 1);
-    let c = lerpColor(color('#00b4db'), color('#00ff87'), inter);
-    stroke(c);
-    line(0, y, width, y);
-  }
+  // Substitua o loop do gradiente por esta linha.
+  // Ela limpa a tela a cada frame mantendo o fundo do CSS visível por trás
+  clear(); 
   
   // Bolhas
   noStroke();
@@ -55,53 +38,7 @@ function draw() {
   textStyle(BOLD);
   text("🌾 Portal Agricola Tech", width/2, 40);
   
-  textSize(13);
-  fill('#006666');
-  textStyle(ITALIC);
-  text("Agro forte, futuro sustentavel", width/2, 65);
-  
-  // Produtos
-  for (let i = 0; i < produtos.length; i++) {
-    let y = 110 + i * 50;
-    
-    if (produtoSelecionado === i) {
-      fill('#00b4db');
-      stroke(255);
-      strokeWeight(3);
-    } else {
-      fill(255, 255, 255, 170);
-      stroke(255, 255, 255, 200);
-      strokeWeight(1);
-    }
-    
-    let w = min(width - 40, 350);
-    rect(width/2, y, w, 42, 12);
-    
-    noStroke();
-    fill(produtoSelecionado === i ? 255 : '#004d4d');
-    textSize(14);
-    textStyle(BOLD);
-    text(produtos[i].icone + " " + produtos[i].nome, width/2, y);
-  }
-  
-  // Preço
-  let precoY = 275;
-  fill(255, 255, 255, 180);
-  stroke('#00ff87');
-  strokeWeight(2);
-  rect(width/2, precoY, 250, 40, 10);
-  
-  noStroke();
-  fill('#003366');
-  textSize(16);
-  textStyle(BOLD);
-  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, precoY);
-  
-  // Botões + e -
-  fill(255, 255, 255, 190);
-  stroke('#00ff87');
-  strokeWeight(2);
-  rect(width/2 - 90, precoY, 50, 40, 10);
+  // ... (todo o restante do seu código do draw continua IGUAL daqui para baixo)
   rect(width/2 + 90, precoY, 50, 40, 10);
   
   noStroke();
