@@ -44,15 +44,17 @@ function draw() {
   textAlign(CENTER, CENTER);
   
   // Título
-  textSize(28);
+  textSize(24);
   fill('#004d4d');
   textStyle(BOLD);
   text("🌾 Portal Agricola Tech", width/2, 40);
   
-  textSize(13);
+  textSize(12);
   fill('#006666');
   textStyle(ITALIC);
   text("Agro forte, futuro sustentavel", width/2, 65);
+  
+  let larguraMax = min(width - 40, 350); // Base de largura para alinhar tudo proporcionalmente
   
   // Produtos
   for (let i = 0; i < produtos.length; i++) {
@@ -68,8 +70,7 @@ function draw() {
       strokeWeight(1);
     }
     
-    let w = min(width - 40, 350);
-    rect(width/2, y, w, 42, 12);
+    rect(width/2, y, larguraMax, 42, 12);
     
     noStroke();
     fill(produtoSelecionado === i ? 255 : '#004d4d');
@@ -78,39 +79,38 @@ function draw() {
     text(produtos[i].icone + " " + produtos[i].nome, width/2, y);
   }
   
-  // Preço
+  // Preço e Botões (+ e -) Dinâmicos
   let precoY = 275;
+  let tamBotaoPreco = larguraMax * 0.16; // Botões laterais proporcionais
+  let tamBarraPreco = larguraMax * 0.64; // Barra de preço do meio proporcional
+  let distPreco = larguraMax * 0.42;    // Distância para os lados
+  
+  // Desenha os fundos dos botões e do preço
   fill(255, 255, 255, 180);
   stroke('#00ff87');
   strokeWeight(2);
-  rect(width/2, precoY, 250, 40, 10);
+  rect(width/2 - distPreco, precoY, tamBotaoPreco, 40, 10); // Botão -
+  rect(width/2, precoY, tamBarraPreco, 40, 10);            // Barra Preço
+  rect(width/2 + distPreco, precoY, tamBotaoPreco, 40, 10); // Botão +
   
-  noStroke();
-  fill('#003366');
-  textSize(16);
-  textStyle(BOLD);
-  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, precoY);
-  
-  // Botões + e -
-  fill(255, 255, 255, 190);
-  stroke('#00ff87');
-  strokeWeight(2);
-  rect(width/2 - 90, precoY, 50, 40, 10);
-  rect(width/2 + 90, precoY, 50, 40, 10);
-  
+  // Textos do preço, + e -
   noStroke();
   fill('#004d4d');
   textSize(22);
   textStyle(BOLD);
-  text("-", width/2 - 90, precoY); 
-  text("+", width/2 + 90, precoY); 
+  text("-", width/2 - distPreco, precoY); 
+  text("+", width/2 + distPreco, precoY); 
+  
+  fill('#003366');
+  textSize(15);
+  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, precoY);
   
   // Quantidade
   let qtdY = 330;
   fill(255, 255, 255, 180);
   stroke('#00b4db');
   strokeWeight(2);
-  rect(width/2, qtdY, 200, 40, 10);
+  rect(width/2, qtdY, larguraMax * 0.6, 40, 10);
   
   noStroke();
   fill('#003366');
@@ -118,21 +118,24 @@ function draw() {
   textStyle(BOLD);
   text("Qtd: " + quantidade + " un", width/2, qtdY);
   
-  // Teclado
+  // Teclado Totalmente Alinhado
   let teclas = ['1','2','3','4','5','6','7','8','9','C','0','←'];
-  let tx = width/2 - 75; 
   let ty = 385;
+  let larguraTecla = larguraMax * 0.3; // Cada tecla ocupa 30% do espaço máximo
+  let espacoTecla = larguraMax * 0.35; // Espaçamento fixo proporcional entre elas
   
   for (let i = 0; i < teclas.length; i++) {
     let col = i % 3;
     let row = floor(i / 3);
-    let x = tx + (col - 1) * 75; 
-    let y = ty + row * 55;
+    
+    // Posiciona em relação ao centro exato da tela (col - 1 transforma 0,1,2 em -1,0,1)
+    let x = width/2 + (col - 1) * espacoTecla; 
+    let y = ty + row * 52;
     
     fill(255, 255, 255, 170);
     stroke(255, 255, 255, 200);
     strokeWeight(1);
-    rect(x, y, 65, 45, 10);
+    rect(x, y, larguraTecla, 45, 10);
     
     noStroke();
     fill('#004d4d');
@@ -142,11 +145,11 @@ function draw() {
   }
   
   // Botão Adicionar
-  let addY = ty + 230;
+  let addY = ty + 225;
   fill('#00cc6a');
   stroke('#00ff87');
   strokeWeight(2);
-  rect(width/2, addY, min(width - 40, 350), 48, 15);
+  rect(width/2, addY, larguraMax, 48, 15);
   
   noStroke();
   fill(255);
@@ -159,7 +162,7 @@ function draw() {
   fill(255, 255, 255, 160);
   stroke('#00cc6a');
   strokeWeight(2);
-  rect(width/2, cartY, min(width - 40, 350), 90, 12);
+  rect(width/2, cartY, larguraMax, 85, 12);
   
   noStroke();
   
@@ -167,7 +170,7 @@ function draw() {
     fill('#004d4d');
     textSize(14);
     textStyle(BOLD);
-    text("🛒 Carrinho (" + carrinho.length + " itens)", width/2, cartY - 30);
+    text("🛒 Carrinho (" + carrinho.length + " itens)", width/2, cartY - 28);
     
     let totalCarrinho = 0;
     for (let item of carrinho) {
@@ -175,18 +178,18 @@ function draw() {
     }
     
     fill('#005500');
-    textSize(16);
+    textSize(15);
     text("Total: R$ " + totalCarrinho.toFixed(2).replace('.', ','), width/2, cartY - 10);
     
     textAlign(LEFT, CENTER);
-    let startX = width/2 - min(width - 40, 350)/2 + 15;
+    let startX = width/2 - larguraMax/2 + 15;
     for (let i = 0; i < min(carrinho.length, 2); i++) {
       let item = carrinho[i];
       let pi = encontrarProduto(item.nome);
       fill('#004d4d');
       textSize(11);
       textStyle(BOLD);
-      text((i+1) + ". " + produtos[pi].icone + " " + item.qtd + "x = R$" + item.subtotal.toFixed(2).replace('.', ','), startX, cartY + 12 + i * 20);
+      text((i+1) + ". " + produtos[pi].icone + " " + item.qtd + "x = R$" + item.subtotal.toFixed(2).replace('.', ','), startX, cartY + 12 + i * 18);
     }
     textAlign(CENTER, CENTER); 
   } else {
@@ -211,43 +214,50 @@ function encontrarProduto(nome) {
 }
 
 function mousePressed() {
+  let larguraMax = min(width - 40, 350);
+  
   // Produtos
   for (let i = 0; i < produtos.length; i++) {
     let y = 110 + i * 50;
-    let w = min(width - 40, 350);
-    if (mouseX > width/2 - w/2 && mouseX < width/2 + w/2 && mouseY > y - 21 && mouseY < y + 21) {
+    if (mouseX > width/2 - larguraMax/2 && mouseX < width/2 + larguraMax/2 && mouseY > y - 21 && mouseY < y + 21) {
       produtoSelecionado = i;
       precoPorUnidade = precosPersonalizados[i];
       return;
     }
   }
   
-  // Botões + e -
+  // Cliques dos Botões + e - Dinâmicos
   let precoY = 275;
-  if (mouseX > width/2 - 115 && mouseX < width/2 - 65 && mouseY > precoY - 20 && mouseY < precoY + 20) {
+  let tamBotaoPreco = larguraMax * 0.16;
+  let distPreco = larguraMax * 0.42;
+  
+  // Clique no botão menos
+  if (mouseX > (width/2 - distPreco) - tamBotaoPreco/2 && mouseX < (width/2 - distPreco) + tamBotaoPreco/2 && mouseY > precoY - 20 && mouseY < precoY + 20) {
     precoPorUnidade = precoPorUnidade - 0.50;
     if (precoPorUnidade < 0.50) precoPorUnidade = 0.50;
     precosPersonalizados[produtoSelecionado] = precoPorUnidade;
     return;
   }
-  if (mouseX > width/2 + 65 && mouseX < width/2 + 115 && mouseY > precoY - 20 && mouseY < precoY + 20) {
+  // Clique no botão mais
+  if (mouseX > (width/2 + distPreco) - tamBotaoPreco/2 && mouseX < (width/2 + distPreco) + tamBotaoPreco/2 && mouseY > precoY - 20 && mouseY < precoY + 20) {
     precoPorUnidade = precoPorUnidade + 0.50;
     precosPersonalizados[produtoSelecionado] = precoPorUnidade;
     return;
   }
   
-  // Teclado
+  // Cliques do Teclado Dinâmico
   let teclas = ['1','2','3','4','5','6','7','8','9','C','0','←'];
-  let tx = width/2 - 75;
   let ty = 385;
+  let larguraTecla = larguraMax * 0.3;
+  let espacoTecla = larguraMax * 0.35;
   
   for (let i = 0; i < teclas.length; i++) {
     let col = i % 3;
     let row = floor(i / 3);
-    let x = tx + (col - 1) * 75;
-    let y = ty + row * 55;
+    let x = width/2 + (col - 1) * espacoTecla;
+    let y = ty + row * 52;
     
-    if (mouseX > x - 32 && mouseX < x + 32 && mouseY > y - 22 && mouseY < y + 22) {
+    if (mouseX > x - larguraTecla/2 && mouseX < x + larguraTecla/2 && mouseY > y - 22 && mouseY < y + 22) {
       let t = teclas[i];
       
       if (t === 'C') {
@@ -266,9 +276,8 @@ function mousePressed() {
   }
   
   // Botão Adicionar
-  let addY = ty + 230;
-  let btnW = min(width - 40, 350);
-  if (mouseX > width/2 - btnW/2 && mouseX < width/2 + btnW/2 && mouseY > addY - 24 && mouseY < addY + 24) {
+  let addY = ty + 225;
+  if (mouseX > width/2 - larguraMax/2 && mouseX < width/2 + larguraMax/2 && mouseY > addY - 24 && mouseY < addY + 24) {
     let qtd = parseInt(quantidade);
     if (qtd > 0) {
       let p = produtos[produtoSelecionado];
