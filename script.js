@@ -1,11 +1,9 @@
 let quantidade = "2";
 let precoPorUnidade = 5.00;
-let total = 10.00;
 let carrinho = [];
 let produtoSelecionado = 0;
 let precosPersonalizados = [5.00, 12.50, 8.00];
 let isMobile = false;
-let bolhas = [];
 
 let produtos = [
   { nome: "Sementes Organicas", precoInicial: 5.00, icone: "🌱" },
@@ -17,15 +15,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Arial');
   isMobile = windowWidth < 768;
-  
-  for (let i = 0; i < 20; i++) {
-    bolhas.push({
-      x: random(width),
-      y: random(height),
-      tamanho: random(10, 50),
-      velocidade: random(0.3, 1.5)
-    });
-  }
+  console.log("SETUP EXECUTADO! Mobile: " + isMobile);
 }
 
 function draw() {
@@ -39,15 +29,6 @@ function draw() {
   }
   
   noStroke();
-  for (let b of bolhas) {
-    fill(255, 255, 255, 30);
-    ellipse(b.x, b.y, b.tamanho);
-    b.y = b.y - b.velocidade;
-    if (b.y < -b.tamanho) {
-      b.y = height + b.tamanho;
-      b.x = random(width);
-    }
-  }
   
   textAlign(CENTER, CENTER);
   
@@ -64,18 +45,18 @@ function draw() {
   textSize(16);
   fill('#004d4d');
   textStyle(NORMAL);
-  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, 120);
-  text("Quantidade: " + quantidade + " un", width/2, 150);
+  text("Preco: R$ " + precoPorUnidade.toFixed(2).replace('.', ','), width/2, 130);
+  text("Quantidade: " + quantidade + " un", width/2, 160);
   
   let totalCarrinho = 0;
-  for (let item of carrinho) {
-    totalCarrinho = totalCarrinho + item.subtotal;
+  for (let i = 0; i < carrinho.length; i++) {
+    totalCarrinho = totalCarrinho + carrinho[i].subtotal;
   }
   
   textSize(20);
   fill('#005500');
   textStyle(BOLD);
-  text("Total Carrinho: R$ " + totalCarrinho.toFixed(2).replace('.', ','), width/2, 200);
+  text("Total Carrinho: R$ " + totalCarrinho.toFixed(2).replace('.', ','), width/2, 210);
   
   fill('#004d4d');
   textSize(12);
@@ -84,25 +65,13 @@ function draw() {
 }
 
 function mousePressed() {
-  console.log("Mouse clicado em: " + mouseX + ", " + mouseY);
+  console.log("CLICOU!");
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   isMobile = windowWidth < 768;
-}    
-    noStroke();
-    fill('#004d4d');
-    textSize(22);
-    textStyle(BOLD);
-    text("-", width/2 - 80, precoY);
-    text("+", width/2 + 80, precoY);
-    
-    // Quantidade
-    let qtdY = 340;
-    fill(255, 255, 255, 180);
-    stroke('#00b4db');
-    strokeWeight(2);
+}    strokeWeight(2);
     rect(width/2, qtdY, 200, 40, 10);
     
     noStroke();
